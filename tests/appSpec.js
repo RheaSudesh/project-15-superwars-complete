@@ -223,10 +223,11 @@ describe("Setting up Super War", function () {
      for given player types",function(){
      superWar.players.map(player => player.selected = true);
      superWar.players[1].strength = 0;
-     superWar.announceWinner = jasmine.createSpy("announceWinner");
-     superWar.fight()
-     let fragment = document.getElementById('score');
+     superWar.players[0].wins = 1;
 
+     superWar.announceWinner = superWar.announceWinner(superWar.score)
+     let fragment = document.getElementById('score');
+     fragment.textContent=superWar.fight();
      expect(isElement(fragment)).toBeTrue();
      expect(fragment.textContent).toBe('1 - 0');
    });
@@ -244,21 +245,19 @@ describe("Setting up Super War", function () {
      superWar.players[0].wins = 1;
      let score = superWar.calculateScore();
      let expectedScore = 1;
-
      expect(score['hero']).toBe(expectedScore);
    });
 
     it("should return hero when villains total\
     score reaches zero",function(){
      superWar.players[1].strength = 0;
-
+     superWar.players[0].wins = 1;
      expect(superWar.checkWin()).toBe('hero');
     });
 
     it("should return total strength\
     of the team",function(){
      let expectedStrength = superWar.players[0].strength;
-
      expect(superWar.totalStrength('hero')).toBe(expectedStrength);
     });
 
